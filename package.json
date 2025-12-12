@@ -1,8 +1,7 @@
 {
-  "name": "nest-typescript-starter",
-  "private": true,
+  "name": "hexagonal-architecture",
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "Hexagonal with nest",
   "license": "MIT",
   "scripts": {
     "build": "nest build",
