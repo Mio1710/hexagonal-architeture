@@ -1,29 +1,24 @@
 {
-  // Prettier configuration
-  "prettier.enable": true,
-  "prettier.requireConfig": false,
-
-  // ESLint configuration
-  "eslint.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.requireConfig": true,
+  "editor.tabSize": 2,
+  "prettier.printWidth": 80,
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
   "eslint.validate": [
     "javascript",
     "javascriptreact",
     "typescript",
-    "typescriptreact",
-    "json",
-    "jsonc"
+    "typescriptreact"
   ],
-
-  // Format on save
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-
-  // Code actions on save (ESLint fixes)
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.organizeImports": "explicit"
   },
-
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "editor.trimAutoWhitespace": true
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

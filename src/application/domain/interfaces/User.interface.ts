@@ -1,7 +1,8 @@
 import { BaseModel } from './BaseModel.interface';
 
-export interface User extends BaseModel {
-  id: string;
+export interface BaseUser {
   name: string;
   email: string;
 }
+
+export interface User extends BaseUser, BaseModel {}
