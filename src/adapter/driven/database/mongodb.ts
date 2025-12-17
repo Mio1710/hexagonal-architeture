@@ -1,8 +1,10 @@
 import { Db, MongoClient } from 'mongodb';
 import { BaseModel } from 'src/application/domain/interfaces';
 import { DatabaseRepository } from 'src/application/domain/repositories/database.repository';
-const uri = 'mongodb://localhost:27017';
 
+const uri =
+  process.env.MONGODB_URI ||
+  'mongodb://root:password@localhost:27017/microservices?authSource=admin';
 export class MongodbAdapter implements DatabaseRepository {
   private db: Db;
 
@@ -38,11 +40,15 @@ export class MongodbAdapter implements DatabaseRepository {
 
   async create<T>(data: T): Promise<T & BaseModel> {
     const now = new Date();
-    const result = await this.db.collection('items').insertOne({
+    console.log('Create data: ', data);
+
+    const result = await this.db.collection('users').insertOne({
       ...data,
       created_at: now,
       updated_at: now,
     });
+    console.log('create successfully: ', result);
+
     return {
       ...data,
       id: result.insertedId.toString(),
