@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongodbAdapter } from './adapter/driven/database/mongodb';
 import { MysqlAdapter } from './adapter/driven/database/mysql';
 import { AppController } from './app.controller';
@@ -8,7 +9,7 @@ import * as Repositories from './application/domain/repositories';
 import * as Services from './application/services';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule.forRoot()],
   controllers: [AppController, ...Object.values(Controllers)],
   providers: [
     AppService,

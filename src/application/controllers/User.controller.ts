@@ -74,7 +74,7 @@ export class UserController {
     } catch (error) {
       return res.status(500).json({
         status: 'error',
-        message: 'Failed to delete user',
+        message: error.message ?? 'Failed to delete user',
       });
     }
   }

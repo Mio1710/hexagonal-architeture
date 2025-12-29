@@ -2,9 +2,13 @@ import { Db, MongoClient, ObjectId } from 'mongodb';
 import { BaseModel } from 'src/application/domain/interfaces';
 import { DatabaseRepository } from 'src/application/domain/repositories/database.repository';
 
-const uri =
-  process.env.MONGODB_URI ||
-  'mongodb://root:password@localhost:27017/hexagonal?authSource=admin';
+const user = process.env.DB_USER || 'root';
+const password = process.env.DB_PASSWORD || 'password';
+const host = process.env.DB_HOST || 'localhost';
+const port = process.env.DB_PORT || '27017';
+const dbName = process.env.DB_NAME || 'hexagonal';
+
+const uri = `mongodb://${user}:${password}@${host}:${port}/${dbName}?authSource=admin`;
 export class MongodbAdapter implements DatabaseRepository {
   private db: Db;
   table: string;

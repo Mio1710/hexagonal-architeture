@@ -21,6 +21,8 @@ export class UserService {
   async deleteUser(id: string): Promise<void> {
     // check user exist
     const user = await this.userRepository.findUserById(id);
+    console.log('Check user: ', user);
+
     if (!user) {
       throw new Error('User not found');
     }
