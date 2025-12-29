@@ -57,24 +57,24 @@ export class MongodbAdapter implements DatabaseRepository {
     } as T & BaseModel;
   }
   async findById<T>(id: string): Promise<T | null> {
-    console.log('Id gett:  ', id);
-    const objectId = new ObjectId(id);
     const result = await this.db
       .collection(this.table)
-      .findOne({ _id: objectId });
+      .findOne({ _id: new ObjectId(id) });
     return result as T | null;
   }
 
   async update<T>(id: string, data: T): Promise<T & BaseModel> {
     console.log('Updating document in MongoDB', id, data);
     data['updated_at'] = new Date();
-    await this.db.collection('items').updateOne({ id: id }, { $set: data });
+    await this.db
+      .collection(this.table)
+      .updateOne({ _id: new ObjectId(id) }, { $set: data });
     return { ...data, id } as T & BaseModel;
   }
 
   async delete(id: string): Promise<void> {
     console.log('Deleting document in MongoDB', id);
-    await this.db.collection('items').deleteOne({ id: id });
+    await this.db.collection(this.table).deleteOne({ _id: new ObjectId(id) });
   }
 
   async findAll<T>(): Promise<T[]> {

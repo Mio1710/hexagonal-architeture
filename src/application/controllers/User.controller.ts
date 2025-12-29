@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { BaseUser } from 'src/application/domain/interfaces';
 import { UserService } from 'src/application/services/User.service';
 import { CreateUserDto } from '../domain/dto/user.dto';
@@ -8,36 +18,64 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUsers() {
-    return await this.userService.getAllUsers();
+  async getUsers(@Res() res: Response) {
+    const data = await this.userService.getAllUsers();
+    return res.status(200).json({
+      status: 'success',
+      data: data,
+    });
   }
 
   @Post()
-  async createUser(@Body() body: CreateUserDto) {
-    return await this.userService.createUser(body);
+  async createUser(@Res() res: Response, @Body() body: CreateUserDto) {
+    const data = await this.userService.createUser(body);
+    return res.status(201).json({
+      status: 'success',
+      data: data,
+    });
   }
 
   @Get(':id')
-  async getUserById(@Param('id') id: string) {
+  async getUserById(@Res() res: Response, @Param('id') id: string) {
     const data = await this.userService.getUserById(id);
     if (!data) {
-      return {
+      return res.status(404).json({
         status: 'error',
         message: 'User not found',
-      };
+      });
     }
-    return {
+    return res.status(200).json({
       status: 'success',
       data: data,
-    };
+    });
   }
 
   @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() body: BaseUser) {
-    const data: BaseUser = {
-      name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-    };
-    return await this.userService.updateUser('some-id', data);
+  async updateUser(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Body() body: BaseUser,
+  ) {
+    const data = await this.userService.updateUser(id, body);
+    return res.status(200).json({
+      status: 'success',
+      data: data,
+    });
+  }
+
+  @Delete(':id')
+  async deleteUser(@Res() res: Response, @Param('id') id: string) {
+    try {
+      await this.userService.deleteUser(id);
+      return res.status(200).json({
+        status: 'success',
+        message: 'User deleted successfully',
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Failed to delete user',
+      });
+    }
   }
 }
