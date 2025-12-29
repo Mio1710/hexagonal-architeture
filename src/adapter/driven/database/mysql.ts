@@ -14,6 +14,7 @@ const access: ConnectionOptions = {
 
 export class MysqlAdapter implements DatabaseRepository {
   private db: Connection;
+  table: string;
   constructor() {}
 
   async initialize(): Promise<void> {

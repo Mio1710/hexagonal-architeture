@@ -4,10 +4,13 @@ import type { DatabaseRepository } from './database.repository';
 
 @Injectable()
 export class UserRepository {
+  private readonly table = 'users';
   constructor(
     @Inject('DatabaseRepository')
     private readonly db: DatabaseRepository,
-  ) {}
+  ) {
+    db.table = this.table;
+  }
 
   async createUser(user: BaseUser): Promise<User> {
     const data = await this.db.create(user);

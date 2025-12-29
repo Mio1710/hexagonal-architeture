@@ -1,13 +1,13 @@
-import { Db, MongoClient } from 'mongodb';
+import { Db, MongoClient, ObjectId } from 'mongodb';
 import { BaseModel } from 'src/application/domain/interfaces';
 import { DatabaseRepository } from 'src/application/domain/repositories/database.repository';
 
 const uri =
   process.env.MONGODB_URI ||
-  'mongodb://root:password@localhost:27017/microservices?authSource=admin';
+  'mongodb://root:password@localhost:27017/hexagonal?authSource=admin';
 export class MongodbAdapter implements DatabaseRepository {
   private db: Db;
-
+  table: string;
   constructor() {}
 
   async initialize(): Promise<void> {
@@ -42,7 +42,7 @@ export class MongodbAdapter implements DatabaseRepository {
     const now = new Date();
     console.log('Create data: ', data);
 
-    const result = await this.db.collection('users').insertOne({
+    const result = await this.db.collection(this.table).insertOne({
       ...data,
       created_at: now,
       updated_at: now,
@@ -57,8 +57,11 @@ export class MongodbAdapter implements DatabaseRepository {
     } as T & BaseModel;
   }
   async findById<T>(id: string): Promise<T | null> {
-    console.log('Finding document by ID in MongoDB', id);
-    const result = await this.db.collection('items').findOne({ id: id });
+    console.log('Id gett:  ', id);
+    const objectId = new ObjectId(id);
+    const result = await this.db
+      .collection(this.table)
+      .findOne({ _id: objectId });
     return result as T | null;
   }
 
@@ -76,7 +79,7 @@ export class MongodbAdapter implements DatabaseRepository {
 
   async findAll<T>(): Promise<T[]> {
     console.log('Finding all documents in MongoDB');
-    const results = await this.db.collection('items').find({}).toArray();
+    const results = await this.db.collection(this.table).find({}).toArray();
     return results as T[];
   }
 }
